@@ -62,8 +62,8 @@ class CovidCountry {
 
 class CountryInfo {
   int iId;
-  int lat;
-  int long;
+  double lat;
+  double long;
   String flag;
   String iso3;
   String iso2;
@@ -72,8 +72,8 @@ class CountryInfo {
 
   CountryInfo.fromJson(Map<String, dynamic> json) {
     iId = json['_id'];
-    lat = json['lat'];
-    long = json['long'];
+    lat = json['lat'].toDouble();
+    long = json['long'].toDouble();
     flag = json['flag'];
     iso3 = json['iso3'];
     iso2 = json['iso2'];

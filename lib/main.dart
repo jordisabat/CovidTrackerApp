@@ -30,16 +30,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   CovidCountry _covidCountry;
-
+  List<String> _locations = ['Spain', 'Portugal', 'Slovenia'];
+  String _selectedCountry = 'Spain';
+  final apiService = APIService(API.sandbox());
+  CovidCountry covid;
   void _getData() async {
-    final apiService = APIService(API.sandbox());
-    CovidCountry covid = await apiService.getEndpointData(
-      endpoint: Endpoint.countries,
-      country: "spain",
-    );
+    covid = await fetchCovidData();
     setState(() {
       _covidCountry = covid;
     });
+  }
+
+  Future<CovidCountry> fetchCovidData() async {
+    CovidCountry covid = await apiService.getEndpointData(
+      endpoint: Endpoint.countries,
+      country: _selectedCountry,
+    );
+    return covid;
   }
 
   @override
@@ -52,8 +59,39 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            DropdownButton(
+              hint: Text(
+                  'Please choose a location'), // Not necessary for Option 1
+              value: _selectedCountry,
+              onChanged: (country) {
+                _selectedCountry = country;
+                _getData();
+              },
+              items: _locations.map((location) {
+                return DropdownMenuItem(
+                  child: new Text(location),
+                  value: location,
+                );
+              }).toList(),
+            ),
             Text(
               _covidCountry != null ? 'cases: ${_covidCountry.cases}' : "-",
+              style: Theme.of(context).textTheme.display1,
+            ),
+            Text(
+              _covidCountry != null ? 'deaths: ${_covidCountry.deaths}' : "-",
+              style: Theme.of(context).textTheme.display1,
+            ),
+            Text(
+              _covidCountry != null
+                  ? 'today deaths: ${_covidCountry.todayDeaths}'
+                  : "-",
+              style: Theme.of(context).textTheme.display1,
+            ),
+            Text(
+              _covidCountry != null
+                  ? 'recovered: ${_covidCountry.recovered}'
+                  : "-",
               style: Theme.of(context).textTheme.display1,
             ),
           ],
