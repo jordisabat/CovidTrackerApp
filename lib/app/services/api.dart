@@ -9,13 +9,14 @@ class API {
 
   static final String host = 'corona.lmao.ninja';
 
-  Uri endpointUri(Endpoint endpoint) => Uri(
+  Uri endpointUri(
+    Endpoint endpoint,
+    String country,
+  ) =>
+      Uri(
         scheme: 'https',
         host: host,
-        path: '${_paths[endpoint]}',
-        queryParameters: {
-          'country': 'spain',
-        },
+        path: '${_paths[endpoint]}/$country',
       );
 
   static Map<Endpoint, String> _paths = {

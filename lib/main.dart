@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_ddd_notes/app/services/api_service.dart';
+import 'package:flutter_firebase_ddd_notes/models/covid_country.model.dart';
 
 import 'app/services/api.dart';
 
@@ -28,16 +29,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _cases = 0;
+  CovidCountry _covidCountry;
 
   void _getData() async {
     final apiService = APIService(API.sandbox());
-    final cases = await apiService.getEndpointData(
+    CovidCountry covid = await apiService.getEndpointData(
       endpoint: Endpoint.countries,
       country: "spain",
     );
     setState(() {
-      _cases = cases;
+      _covidCountry = covid;
     });
   }
 
@@ -52,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              _cases != null ? 'cases: $_cases' : '-',
+              _covidCountry != null ? 'cases: ${_covidCountry.cases}' : "-",
               style: Theme.of(context).textTheme.display1,
             ),
           ],
