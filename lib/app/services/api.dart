@@ -33,9 +33,9 @@ class API {
         host: host,
         port: port,
         path: '$basePath/${_paths[endpoint]}', //cases?country=Spain
-        // queryParameters: {
-        //   'country': 'Spain',
-        // },
+        queryParameters: {
+          'country': 'spain',
+        },
       );
 
   static Map<Endpoint, String> _paths = {

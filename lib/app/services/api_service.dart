@@ -26,18 +26,18 @@ class APIService {
     throw response;
   }
 
-  Future<int> getEndpointData({
-    @required String accessToken,
-    @required Endpoint endpoint
-  }) async {
+  Future<int> getEndpointData(
+      {@required String accessToken,
+      @required Endpoint endpoint,
+      String country}) async {
     final uri = api.endpointUri(endpoint);
     final response = await http.get(
       uri.toString(),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
+    print(response);
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
-      print(data);
       if (data.isNotEmpty) {
         final Map<String, dynamic> endpointData = data[0];
         final String responseJsonKey = _responseJsonKeys[endpoint];
@@ -53,7 +53,7 @@ class APIService {
   }
 
   static Map<Endpoint, String> _responseJsonKeys = {
-    Endpoint.cases: 'cases',
+    Endpoint.cases: 'data',
     Endpoint.casesSuspected: 'data',
     Endpoint.casesConfirmed: 'data',
     Endpoint.deaths: 'data',
