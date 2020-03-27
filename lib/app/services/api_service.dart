@@ -9,39 +9,21 @@ class APIService {
   APIService(this.api);
   final API api;
 
-  Future<String> getAccessToken() async {
-    final response = await http.post(
-      api.tokenUri().toString(),
-      headers: {'Authorization': 'Basic ${api.apiKey}'},
-    );
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final accessToken = data['access_token'];
-      if (accessToken != null) {
-        return accessToken;
-      }
-    }
-    print(
-        'Request ${api.tokenUri()} failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
-    throw response;
-  }
-
-  Future<int> getEndpointData(
-      {@required String accessToken,
-      @required Endpoint endpoint,
-      String country}) async {
+  Future<int> getEndpointData({
+    @required Endpoint endpoint,
+    @required String country,
+  }) async {
     final uri = api.endpointUri(endpoint);
     final response = await http.get(
       uri.toString(),
-      headers: {'Authorization': 'Bearer $accessToken'},
     );
     print(response);
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       if (data.isNotEmpty) {
         final Map<String, dynamic> endpointData = data[0];
-        final String responseJsonKey = _responseJsonKeys[endpoint];
-        final int result = endpointData[responseJsonKey];
+        // final String responseJsonKey = _responseJsonKeys[endpoint];
+        final int result = endpointData['cases'];
         if (result != null) {
           return result;
         }
@@ -52,11 +34,7 @@ class APIService {
     throw response;
   }
 
-  static Map<Endpoint, String> _responseJsonKeys = {
-    Endpoint.cases: 'data',
-    Endpoint.casesSuspected: 'data',
-    Endpoint.casesConfirmed: 'data',
-    Endpoint.deaths: 'data',
-    Endpoint.recovered: 'data',
-  };
+  // static Map<Endpoint, String> _responseJsonKeys = {
+  //   Endpoint.countries: 'countries',
+  // };
 }

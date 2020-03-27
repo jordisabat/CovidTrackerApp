@@ -29,28 +29,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _cases = 0;
-  int _deaths = 0;
-  int _recovered = 0;
 
   void _getData() async {
     final apiService = APIService(API.sandbox());
-    final accessToken = await apiService.getAccessToken();
     final cases = await apiService.getEndpointData(
-      accessToken: accessToken,
-      endpoint: Endpoint.cases,
-    );
-    final deaths = await apiService.getEndpointData(
-      accessToken: accessToken,
-      endpoint: Endpoint.deaths,
-    );
-    final recovered = await apiService.getEndpointData(
-      accessToken: accessToken,
-      endpoint: Endpoint.recovered,
+      endpoint: Endpoint.countries,
+      country: "spain",
     );
     setState(() {
       _cases = cases;
-      _deaths = deaths;
-      _recovered = recovered;
     });
   }
 
@@ -66,14 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               _cases != null ? 'cases: $_cases' : '-',
-              style: Theme.of(context).textTheme.display1,
-            ),
-            Text(
-              _deaths != null ? 'recovered $_recovered' : '-',
-              style: Theme.of(context).textTheme.display1,
-            ),
-            Text(
-              _deaths != null ? 'deaths $_deaths' : '-',
               style: Theme.of(context).textTheme.display1,
             ),
           ],

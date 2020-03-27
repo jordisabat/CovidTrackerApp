@@ -1,48 +1,24 @@
-import 'package:flutter/foundation.dart';
-
-import 'api_keys.dart';
-
 enum Endpoint {
-  cases,
-  casesSuspected,
-  casesConfirmed,
-  deaths,
-  recovered,
+  countries,
 }
 
 class API {
-  API({@required this.apiKey});
-  final String apiKey;
+  API();
 
-  factory API.sandbox() => API(apiKey: APIKeys.ncovSandboxKey);
+  factory API.sandbox() => API();
 
-  static final String host = 'apigw.nubentos.com';
-  static final int port = 443;
-  static final String basePath = 't/nubentos.com/ncovapi/1.0.0';
-
-  Uri tokenUri() => Uri(
-        scheme: 'https',
-        host: host,
-        port: port,
-        path: 'token',
-        queryParameters: {'grant_type': 'client_credentials'},
-      );
+  static final String host = 'corona.lmao.ninja';
 
   Uri endpointUri(Endpoint endpoint) => Uri(
         scheme: 'https',
         host: host,
-        port: port,
-        path: '$basePath/${_paths[endpoint]}', //cases?country=Spain
+        path: '${_paths[endpoint]}',
         queryParameters: {
           'country': 'spain',
         },
       );
 
   static Map<Endpoint, String> _paths = {
-    Endpoint.cases: 'cases',
-    Endpoint.casesSuspected: 'cases/suspected',
-    Endpoint.casesConfirmed: 'cases/confirmed',
-    Endpoint.deaths: 'deaths',
-    Endpoint.recovered: 'recovered',
+    Endpoint.countries: 'countries',
   };
 }

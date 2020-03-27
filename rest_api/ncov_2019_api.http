@@ -1,33 +1,3 @@
- # Used to get an access token given an autorization key
-POST {{baseUrl}}/token?grant_type=client_credentials
-Authorization: Basic {{authorization}}
 
-###
-
-GET {{baseUrl}}/t/nubentos.com/ncovapi/1.0.0/cases?country=Spain
+GET {{baseUrl}}
 Accept: application/json
-Authorization: Bearer {{accessToken}}
-
-###
-
-GET {{baseUrl}}/t/nubentos.com/ncovapi/1.0.0/cases/suspected?country=Spain
-Accept: application/json
-Authorization: Bearer {{accessToken}}
-
-###
-
-GET {{baseUrl}}/t/nubentos.com/ncovapi/1.0.0/cases/confirmed?country=Spain
-Accept: application/json
-Authorization: Bearer {{accessToken}}
-
-###
-
-GET {{baseUrl}}/t/nubentos.com/ncovapi/1.0.0/deaths?country=Spain
-Accept: application/json
-Authorization: Bearer {{accessToken}}
-
-###
-
-GET {{baseUrl}}/t/nubentos.com/ncovapi/1.0.0/recovered
-Accept: application/json
-Authorization: Bearer {{accessToken}}
