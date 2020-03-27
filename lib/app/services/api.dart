@@ -2,6 +2,14 @@ import 'package:flutter/foundation.dart';
 
 import 'api_keys.dart';
 
+enum Endpoint {
+  cases,
+  casesSuspected,
+  casesConfirmed,
+  deaths,
+  recovered,
+}
+
 class API {
   API({@required this.apiKey});
   final String apiKey;
@@ -19,4 +27,22 @@ class API {
         path: 'token',
         queryParameters: {'grant_type': 'client_credentials'},
       );
+
+  Uri endpointUri(Endpoint endpoint) => Uri(
+        scheme: 'https',
+        host: host,
+        port: port,
+        path: '$basePath/${_paths[endpoint]}', //cases?country=Spain
+        // queryParameters: {
+        //   'country': 'Spain',
+        // },
+      );
+
+  static Map<Endpoint, String> _paths = {
+    Endpoint.cases: 'cases',
+    Endpoint.casesSuspected: 'cases/suspected',
+    Endpoint.casesConfirmed: 'cases/confirmed',
+    Endpoint.deaths: 'deaths',
+    Endpoint.recovered: 'recovered',
+  };
 }

@@ -9,11 +9,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Covid-19 tracker',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Covid-19'),
     );
   }
 }
@@ -28,13 +28,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _accessToken = '';
+  int _cases = 0;
+  int _deaths = 0;
+  int _recovered = 0;
 
-  void _updateAccessToken() async {
+  void _getData() async {
     final apiService = APIService(API.sandbox());
     final accessToken = await apiService.getAccessToken();
+    final cases = await apiService.getEndpointData(
+      accessToken: accessToken,
+      endpoint: Endpoint.cases,
+    );
+    final deaths = await apiService.getEndpointData(
+      accessToken: accessToken,
+      endpoint: Endpoint.deaths,
+    );
+    final recovered = await apiService.getEndpointData(
+      accessToken: accessToken,
+      endpoint: Endpoint.recovered,
+    );
     setState(() {
-      _accessToken = accessToken;
+      _cases = cases;
+      _deaths = deaths;
+      _recovered = recovered;
     });
   }
 
@@ -49,17 +65,22 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              _cases != null ? 'cases: $_cases' : '-',
+              style: Theme.of(context).textTheme.display1,
             ),
             Text(
-              '$_accessToken',
+              _deaths != null ? 'recovered $_recovered' : '-',
+              style: Theme.of(context).textTheme.display1,
+            ),
+            Text(
+              _deaths != null ? 'deaths $_deaths' : '-',
               style: Theme.of(context).textTheme.display1,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _updateAccessToken,
+        onPressed: _getData,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
